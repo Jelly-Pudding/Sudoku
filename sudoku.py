@@ -6,19 +6,13 @@ class Sudoku:
 		print("=========================")
 		for i, block in enumerate(self.sudoku_board):
 			count += 1
+			stringer = " ".join(str(item) for item in block)
+			stringer = stringer.replace("[","| ") + " |"
+			stringer = stringer.replace("]","")
+			stringer = stringer.replace(",","")
+			print(stringer)
 			if count % 3 == 0:
-				stringer = " ".join(str(item) for item in block)
-				stringer = stringer.replace("[","| ") + " |"
-				stringer = stringer.replace("]","")
-				stringer = stringer.replace(",","")
-				print(stringer)
-				print("=========================")	
-			else:
-				stringer = " ".join(str(item) for item in block)
-				stringer = stringer.replace("[","| ") + " |"
-				stringer = stringer.replace("]","")
-				stringer = stringer.replace(",","")
-				print(stringer)								
+				print("=========================")									
 
 	def checker(self):
 		#Checks horizontal
