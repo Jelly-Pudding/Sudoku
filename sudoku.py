@@ -3,16 +3,22 @@ class Sudoku:
 		self.sudoku_board = [[[0 for row in range(3)] for column in range(3)] for expandboard in range(9)]
 	def printer(self):
 		count = 0
-		print("______________________________________\n")
-		for row in self.sudoku_board:
-			for i, item in enumerate(row):
-				count += 1
-				if count % 9 == 0:
-					print(item, end = " | \n______________________________________\n")
-				elif i == 0:
-					print("|", item, end = " | ")
-				else:
-					print(item, end = " | ")				
+		print("_________________________\n")
+		for i, block in enumerate(self.sudoku_board):
+			count += 1
+			if count % 3 == 0:
+				stringer = " ".join(str(item) for item in block)
+				stringer = stringer.replace("[","| ") + " |"
+				stringer = stringer.replace("]","")
+				stringer = stringer.replace(",","")
+				print(stringer)	
+				print("_________________________")
+			else:
+				stringer = " ".join(str(item) for item in block)
+				stringer = stringer.replace("[","| ") + " |"
+				stringer = stringer.replace("]","")
+				stringer = stringer.replace(",","")
+				print(stringer)								
 			print() 
 
 suk = Sudoku()
