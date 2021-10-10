@@ -3,7 +3,7 @@ class Sudoku:
 		self.sudoku_board = [[[0 for item_in_box_row in range(3)] for box_per_box_row in range(3)] for horizontal_line in range(9)]
 	def printer(self):
 		count = 0
-		print("_________________________\n")
+		print("=========================")
 		for i, block in enumerate(self.sudoku_board):
 			count += 1
 			if count % 3 == 0:
@@ -11,15 +11,15 @@ class Sudoku:
 				stringer = stringer.replace("[","| ") + " |"
 				stringer = stringer.replace("]","")
 				stringer = stringer.replace(",","")
-				print(stringer)	
-				print("_________________________")
+				print(stringer)
+				print("=========================")	
 			else:
 				stringer = " ".join(str(item) for item in block)
 				stringer = stringer.replace("[","| ") + " |"
 				stringer = stringer.replace("]","")
 				stringer = stringer.replace(",","")
 				print(stringer)								
-			print() 
+
 	def checker(self):
 		#Checks horizontal
 		for number in range(1, 10, 1):
