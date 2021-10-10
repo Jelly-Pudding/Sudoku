@@ -3,15 +3,17 @@ class Sudoku:
 		self.sudoku_board = [[[0 for row in range(3)] for column in range(3)] for expandboard in range(9)]
 	def printer(self):
 		count = 0
+		print("______________________________________\n")
 		for row in self.sudoku_board:
-			for item in row:
+			for i, item in enumerate(row):
 				count += 1
 				if count % 9 == 0:
-					print(item, end = " \n----------------------------")
+					print(item, end = " | \n______________________________________\n")
+				elif i == 0:
+					print("|", item, end = " | ")
 				else:
-					print(item, end = " ")
-								
-			print()
+					print(item, end = " | ")				
+			print() 
 
 suk = Sudoku()
 
