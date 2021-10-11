@@ -17,22 +17,29 @@ class Sudoku:
 				print("=========================")									
 
 	def checker(self):
-		#Checks horizontal
-		for number in range(1, 10, 1):
-			for row in range(0, 9, 1):
-				count_numbers = [row.count(number) for row in suk.sudoku_board[row]]
-				summed = sum(count_numbers)
-				if summed > 1:
-					return False
-		#Checks vertical
+
+		#conversion to 2d list then 1d list for easier checking
+
 		two_d_list = []
-		for e1 in suk.sudoku_board:
+		for e1 in self.sudoku_board:
 			for e2 in e1:
 				two_d_list.append(e2)
 		one_d_list = []
 		for e1 in two_d_list:
 			for e2 in e1:
                 		one_d_list.append(e2)
+
+		#horizontal checker
+
+		for i in range(9, 82, 9):
+			sliced_list = one_d_list[i - 9:i]
+			for numbers in range(1, 10, 1):
+				counted = sliced_list.count(numbers)
+				if counted >1:
+					return False
+
+		#vertical checker
+		
 		for i in range(9):
 			spliced_list = one_d_list[i:]
 			every_other_element = spliced_list[::9]
@@ -43,8 +50,10 @@ class Sudoku:
 
 suk = Sudoku()
 
-suk.sudoku_board[8][2][2] = 1
-suk.sudoku_board[7][2][2] = 1
+suk.sudoku_board[0][0][0] = 1
+suk.sudoku_board[1][2][2] = 1
+suk.sudoku_board[2][2][2] = 1
+
 suk.printer()
 
 
