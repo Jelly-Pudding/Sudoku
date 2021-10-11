@@ -14,6 +14,15 @@ class Sudoku:
 			if count % 3 == 0:
 				print("=========================")									
 
+	def next_available_move(self):
+		#goes left to right, top to bottom
+		index_list = []
+		for i in range(0, 9, 1):
+			for j in range(0, 3, 1):
+				for k in range(0, 3, 1):
+					if self.sudoku_board[i][j][k] == 0:
+						return [i, j, k]
+
 	def checker(self):
 		skip_list = False
 		number = 0
@@ -73,13 +82,23 @@ suk = Sudoku()
 suk.sudoku_board[0][0][0] = 9
 suk.sudoku_board[1][1][1] = 9
 suk.sudoku_board[0][2][2] = 5
-suk.sudoku_board[1][2][0] = 4
+suk.sudoku_board[1][0][0] = 4
 suk.sudoku_board[3][1][2] = 6
 suk.sudoku_board[4][1][0] = 7
 suk.sudoku_board[8][2][2] = 2
 suk.sudoku_board[7][2][0] = 1
-
+suk.sudoku_board[0][0][1] = 1
+suk.sudoku_board[0][0][2] = 3
+suk.sudoku_board[0][1][0] = 6
+suk.sudoku_board[0][1][1] = 7
+suk.sudoku_board[0][1][2] = 8
+suk.sudoku_board[0][2][0] = 2
+suk.sudoku_board[0][2][1] = 4
 
 suk.printer()
 
 print(suk.checker())
+
+yep = suk.next_available_move()
+
+print(yep)
