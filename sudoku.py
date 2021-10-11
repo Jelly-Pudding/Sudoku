@@ -1,3 +1,4 @@
+import copy
 class Sudoku:
 	def __init__(self):
 		self.sudoku_board = [[[0 for item_in_box_rows in range(3)] for box_per_row_of_boxes in range(3)] for horizontal_line in range(9)]
@@ -16,12 +17,13 @@ class Sudoku:
 
 	def next_available_move(self):
 		#goes left to right, top to bottom
-		index_list = []
 		for i in range(0, 9, 1):
 			for j in range(0, 3, 1):
 				for k in range(0, 3, 1):
 					if self.sudoku_board[i][j][k] == 0:
 						return [i, j, k]
+		#returns False if there are no possible moves
+		return False
 
 	def checker(self):
 		skip_list = False
@@ -56,6 +58,8 @@ class Sudoku:
 				if counted >1:
 					return False
 
+		#box checker
+
 		for i in range(0, 28, 3):
 			if i == 9:
 				skip_list = True
@@ -76,7 +80,10 @@ class Sudoku:
 				if counted >1:
 					return False
 
+		#the position must be valid if false has not been returned yet
 
+		return True
+		
 suk = Sudoku()
 
 suk.sudoku_board[0][0][0] = 9
@@ -95,10 +102,34 @@ suk.sudoku_board[0][1][2] = 8
 suk.sudoku_board[0][2][0] = 2
 suk.sudoku_board[0][2][1] = 4
 
+def backtracking(classer):
+	#a recursive function for finding a solution - it is very quick because it checks if the current board configuration is valid, and if it isn't it goes back a step (backtracking)
+	if classer.next_available_move() == False:
+		#means there are no moves left - i.e. the solution has been found
+		return True
+	else:
+		#gets the next available move as a list of indices
+		move_index = classer.next_available_move()
+		#makes a copy - ensuring invalid moves aren't immediately fed into the main board
+		copied = copy.deepcopy(classer)
+		for i in range(1, 10, 1):
+			copied.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
+			if copied.checker() == True:
+				classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
+				#The recursive part of the function (function called inside itself) 
+				if backtracking(classer) == True:
+					return True
+				#Goes back a step(s) (backtracks) and blanks the tile(s) as the current board configuration must be invalid if the solution was not found
+				classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
+		#returns False as the solution won't have been found if the script gets to this line
+		return False
+					
+
 suk.printer()
 
-print(suk.checker())
 
-yep = suk.next_available_move()
+backtracking(suk)
 
-print(yep)
+suk.printer()
+suk.checker()
+
