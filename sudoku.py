@@ -86,21 +86,41 @@ class Sudoku:
 		
 suk = Sudoku()
 
-suk.sudoku_board[0][0][0] = 9
-suk.sudoku_board[1][1][1] = 9
-suk.sudoku_board[0][2][2] = 5
-suk.sudoku_board[1][0][0] = 4
-suk.sudoku_board[3][1][2] = 6
-suk.sudoku_board[4][1][0] = 7
-suk.sudoku_board[8][2][2] = 2
-suk.sudoku_board[7][2][0] = 1
-suk.sudoku_board[0][0][1] = 1
-suk.sudoku_board[0][0][2] = 3
-suk.sudoku_board[0][1][0] = 6
-suk.sudoku_board[0][1][1] = 7
-suk.sudoku_board[0][1][2] = 8
-suk.sudoku_board[0][2][0] = 2
-suk.sudoku_board[0][2][1] = 4
+suk.sudoku_board[1][0][0] = 5
+suk.sudoku_board[2][0][0] = 3
+suk.sudoku_board[4][0][0] = 8
+suk.sudoku_board[7][0][0] = 2
+
+suk.sudoku_board[2][0][1] = 8
+suk.sudoku_board[4][0][1] = 4
+suk.sudoku_board[7][0][1] = 7
+
+suk.sudoku_board[3][0][2] = 6
+suk.sudoku_board[5][0][2] = 5
+suk.sudoku_board[6][0][2] = 4
+
+
+suk.sudoku_board[2][1][0] = 7
+suk.sudoku_board[3][1][0] = 4
+suk.sudoku_board[7][1][0] = 3
+
+suk.sudoku_board[0][1][1] = 2
+
+
+suk.sudoku_board[4][1][2] = 3
+suk.sudoku_board[8][1][2] = 9
+
+
+suk.sudoku_board[0][2][0] = 6
+suk.sudoku_board[4][2][0] = 9
+
+
+suk.sudoku_board[8][2][1] = 1
+
+
+suk.sudoku_board[2][2][2] = 2
+suk.sudoku_board[5][2][2] = 8
+suk.sudoku_board[7][2][2] = 6
 
 def backtracking(classer):
 	#a recursive function for finding a solution - it is very quick because it checks if the current board configuration is valid, and if it isn't it goes back a step (backtracking)
@@ -132,4 +152,3 @@ backtracking(suk)
 
 suk.printer()
 suk.checker()
-
