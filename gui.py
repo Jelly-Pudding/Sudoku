@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 import pygame, sys
 from sudoku import Sudoku
@@ -58,15 +59,48 @@ class Pane(object):
 				count +=1		
 				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)				
 				self.screen.blit(self.font.render(str(one_d_list[count]), True, (255, 0, 0)), (i*25+7, j*25+2)) 				
-
-
+				
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 4)
-
-
+		
 		pygame.display.update()
+		
+
+	def backtracking(self, classer):
+		if classer.next_available_move() == False:
+			#means there are no moves left - i.e. the solution has been found
+			return True
+		else:
+			#gets the next available move as a list of indices
+			move_index = classer.next_available_move()
+			#makes a copy - ensuring invalid moves aren't immediately fed into the main board
+			copied = copy.deepcopy(classer)
+			for i in range(1, 10, 1):
+				copied.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
+				if copied.checker() == True:
+					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
+					self.screen.fill((255, 255, 255))
+					self.add_rectangle()
+					#The recursive part of the function (function called inside itself) 
+					if self.backtracking(classer) == True:
+						return True
+					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid if the solution was not found
+					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
+			#returns False as the solution won't have been found if the script gets to this line
+			return False	
+
+
+
+
+
+
+
+
+
+
+
 	def add_text(self):
 		#for i in range(0, 9, 1):
 			#for j in range(0, 9, 1):
@@ -81,6 +115,7 @@ class Pane(object):
 def main():
 	pan = Pane()
 	pan.add_rectangle()
+	pan.backtracking(bot)
 	pan.add_text()
 	clock = pygame.time.Clock()
 	while True:
