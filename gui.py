@@ -1,3 +1,4 @@
+import numpy as np
 import pygame, sys
 from sudoku import Sudoku
 from sudoku import backtracking
@@ -40,11 +41,23 @@ class Pane(object):
 		pygame.display.update()
 		self.FPS = 60
 	def add_rectangle(self):
-		text = self.font.render("0", True, ((225, 0, 0)))
+		count = -1
+		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
+		newlist = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
+		two_d_list = []
+		for e1 in newlist:
+			for e2 in e1:
+				two_d_list.append(e2)
+		one_d_list = []
+		for e1 in two_d_list:
+			for e2 in e1:
+				one_d_list.append(e2)
+
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
-				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
-				self.screen.blit(self.font.render("0", True, (255, 0, 0)), (i*25+7, j*25+2)) 				
+				count +=1		
+				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)				
+				self.screen.blit(self.font.render(str(one_d_list[count]), True, (255, 0, 0)), (i*25+7, j*25+2)) 				
 
 
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
@@ -71,7 +84,7 @@ def main():
 	pan.add_text()
 	clock = pygame.time.Clock()
 	while True:
-		clock.tick(60)
+		clock.tick(pan.FPS)
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT:
 				pygame.quit(); sys.exit();
