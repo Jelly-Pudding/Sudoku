@@ -35,13 +35,20 @@ class Pane(object):
 		pygame.init()
 		self.font = pygame.font.SysFont("Arial", 17)
 		pygame.display.set_caption("Sudoku")	
-		self.screen = pygame.display.set_mode((220, 220), 0, 32)
+		self.screen = pygame.display.set_mode((225, 225), 0, 32)
 		self.screen.fill((255, 255, 255))
 		pygame.display.update()
 		self.FPS = 60
 	def add_rectangle(self):
-		self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (0, 0, 20, 20), 2)
-		self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (0, 200, 20, 20), 2)
+		for i in range(0, 9, 1):
+			for j in range(0, 9, 1):
+				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 5)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 5)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 5)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 5)
+
 
 		pygame.display.update()
 	def add_text(self):
