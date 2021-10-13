@@ -40,19 +40,29 @@ class Pane(object):
 		pygame.display.update()
 		self.FPS = 60
 	def add_rectangle(self):
+		text = self.font.render("0", True, ((225, 0, 0)))
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
 				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+				self.screen.blit(self.font.render("0", True, (255, 0, 0)), (i*25+7, j*25+2)) 				
 
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 5)
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 5)
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 5)
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 5)
+
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 4)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 4)
 
 
 		pygame.display.update()
 	def add_text(self):
-		self.screen.blit(self.font.render("0", True, (255, 0, 0)), (6, 1))
+		#for i in range(0, 9, 1):
+			#for j in range(0, 9, 1):
+				#if i < 3:
+					#self.screen.blit(self.font.render("3", True, (255, 0, 0)), (27*i +5 , j*25.7))
+				#elif i < 6:
+					#self.screen.blit(self.font.render("4", True, (255, 0, 0)), (27*i, j*25.6))
+				#else:
+					#self.screen.blit(self.font.render("5", True, (255, 0, 0)), (26*i, j*25.3))
 		pygame.display.update()
 
 def main():
