@@ -2,7 +2,6 @@ import copy
 import numpy as np
 import pygame, sys
 from sudoku import Sudoku
-from sudoku import backtracking
 
 bot = Sudoku()
 
@@ -28,9 +27,6 @@ bot.sudoku_board[8][2][1] = 1
 bot.sudoku_board[2][2][2] = 2
 bot.sudoku_board[5][2][2] = 8
 bot.sudoku_board[7][2][2] = 6
-
-#bot.printer()
-#backtracking(bot)
 
 class Pane(object):
 	def __init__(self):
@@ -81,13 +77,18 @@ class Pane(object):
 				copied.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
 				if copied.checker() == True:
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
+					#blanks the screen so numbers don't overlap one another
 					self.screen.fill((255, 255, 255))
+					#updates the screen with the new numbers
 					self.add_rectangle()
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
 						return True
 					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid if the solution was not found
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
+					#blanks the screen & updates numbers
+					self.screen.fill((255, 255, 255))
+					self.add_rectangle()
 			#returns False as the solution won't have been found if the script gets to this line
 			return False	
 
@@ -126,3 +127,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+

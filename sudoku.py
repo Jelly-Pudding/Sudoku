@@ -132,12 +132,12 @@ def backtracking(classer):
 		#returns False as the solution won't have been found if the script gets to this line
 		return False
 					
+#backtracking(suk)
+#suk.printer()
 
-suk.printer()
-suk.checker()
 
 
-backtracking(suk)
 
-suk.printer()
-print(suk.checker())
+
+
+
