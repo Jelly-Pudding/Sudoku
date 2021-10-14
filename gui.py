@@ -120,7 +120,6 @@ class Pane(object):
 						return True
 					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid (the move does not result in the puzzle being solved)
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
-					#blanks the screen & updates numbers
 			#returns False as there can't be a solution if the function arrives at this line
 			return False	
 
@@ -134,14 +133,10 @@ def main():
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT:
 				pygame.quit(); sys.exit();
-			elif event.type == pygame.MOUSEMOTION:
-				#print("mouse at (%d, %d" % event.pos)
-				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN:
 				mouse_x, mouse_y = pygame.mouse.get_pos()
 				pan.screen.fill((255, 255, 255))
 				pan.add_rectangle(mouse_x, mouse_y)
-				bot.printer()
 			elif event.type == pygame.KEYDOWN:
 				pan.backtracking(bot)
 
