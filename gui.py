@@ -53,11 +53,13 @@ class Pane(object):
 		self.screen.fill((255, 255, 255))
 		pygame.display.update()
 		self.FPS = 60
+		self.switch_number = 1
 	def add_rectangle(self, mouse_x, mouse_y):
-
+		if self.switch_number == 10:
+			self.switch_number = 1
 		if mouse_x > 0 and mouse_x < 25 and mouse_y > 0 and mouse_y < 25:
-			bot.sudoku_board[0][0][0] = 5
-
+			bot.sudoku_board[0][0][0] = self.switch_number
+			self.switch_number += 1
 		count = -1
 		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
 		newlist = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
@@ -125,11 +127,10 @@ def main():
 				pygame.quit(); sys.exit();
 			elif event.type == pygame.MOUSEMOTION:
 				print("mouse at (%d, %d" % event.pos)
-		key = pygame.key.get_pressed()
-		if key[pygame.K_SPACE]:
-			mouse_x, mouse_y = pygame.mouse.get_pos()
-			pan.screen.fill((255, 255, 255))
-			pan.add_rectangle(mouse_x, mouse_y)
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y)
 
 if __name__ == "__main__":
 	main()
