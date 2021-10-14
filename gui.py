@@ -28,6 +28,22 @@ bot.sudoku_board[2][2][2] = 2
 bot.sudoku_board[5][2][2] = 8
 bot.sudoku_board[7][2][2] = 6
 
+#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
+original_numbers = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
+two_d_list = []
+for e1 in original_numbers:
+	for e2 in e1:
+		two_d_list.append(e2)
+one_d_list = []
+for e1 in two_d_list:
+	for e2 in e1:
+		one_d_list.append(e2)
+#Will store the indices of the original numbers in the puzzle (so as to differentiate them from the changing numbers in the backtracking function)
+original_index = []
+for index in range(len(one_d_list)):
+	if one_d_list[index] != 0:
+		original_index.append(index)
+
 class Pane(object):
 	def __init__(self):
 		pygame.init()
@@ -54,10 +70,12 @@ class Pane(object):
 			for j in range(0, 9, 1):
 				count +=1		
 				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
-				if one_d_list[count] == 0:				
+				if count in original_index:
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
+				elif one_d_list[count] == 0:				
 					self.screen.blit(self.font.render(" ", True, (255, 0, 0)), (i*25+7, j*25+2))
 				elif one_d_list[count] != 0:
-					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 140, 140)), (i*25+7, j*25+2)) 				
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2)) 				
 				
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
@@ -65,7 +83,6 @@ class Pane(object):
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 4)
 		
 		pygame.display.update()
-		
 
 	def backtracking(self, classer):
 		if classer.next_available_move() == False:
