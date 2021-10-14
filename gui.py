@@ -87,12 +87,12 @@ class Pane(object):
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
 						return True
-					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid if the solution was not found
+					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid (the move does not result in the puzzle being solved)
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
 					#blanks the screen & updates numbers
 					self.screen.fill((255, 255, 255))
 					self.add_rectangle()
-			#returns False as the solution won't have been found if the script gets to this line
+			#returns False as there can't be a solution if the function arrives at this line
 			return False	
 
 def main():

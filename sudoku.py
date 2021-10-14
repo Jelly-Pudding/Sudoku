@@ -127,9 +127,9 @@ def backtracking(classer):
 				#The recursive part of the function (function called inside itself) 
 				if backtracking(classer) == True:
 					return True
-				#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid if the solution was not found
-				classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
-		#returns False as the solution won't have been found if the script gets to this line
+			#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid (move is invalid or it does not solve the puzzle)
+			classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
+		#returns False as there's no solution if the function gets to this line without returning yet
 		return False
 					
 #backtracking(suk)
