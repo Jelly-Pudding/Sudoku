@@ -55,7 +55,7 @@ class Pane(object):
 				count +=1		
 				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
 				if one_d_list[count] == 0:				
-					self.screen.blit(self.font.render(str(one_d_list[count]), True, (255, 0, 0)), (i*25+7, j*25+2))
+					self.screen.blit(self.font.render(" ", True, (255, 0, 0)), (i*25+7, j*25+2))
 				elif one_d_list[count] != 0:
 					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 140, 140)), (i*25+7, j*25+2)) 				
 				
