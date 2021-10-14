@@ -5,9 +5,12 @@ from sudoku import Sudoku
 
 bot = Sudoku()
 
-def original_indices():
-	#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly
-	original_numbers = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
+def three_dimensions_to_one(num):
+	if num == 0:
+		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly
+		original_numbers = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
+	elif num == 1:
+		original_numbers = bot.sudoku_board
 	two_d_list = []
 	for e1 in original_numbers:
 		for e2 in e1:
@@ -21,7 +24,7 @@ def original_indices():
 	for index in range(len(one_d_list)):
 		if one_d_list[index] != 0:
 			original_index.append(index)
-	return original_index
+	return [original_index, one_d_list]
 
 class Pane(object):
 	def __init__(self):
@@ -40,32 +43,15 @@ class Pane(object):
 		for i in range(1, 10, 1):
 			for j in range(1, 10, 1):
 				if mouse_x > i * 25 - 25 and mouse_x < i * 25 and mouse_y > j * 25 - 25 and mouse_y < j * 25:
-					two_d_list = []
-					for e1 in bot.sudoku_board:
-						for e2 in e1:
-							two_d_list.append(e2)
-					one_d_list = []
-					for e1 in two_d_list:
-						for e2 in e1:
-							one_d_list.append(e2)
+					one_d_list = three_dimensions_to_one(1)[1]
 					if j != 1:
 						j = (j -1) * 9 + 1
 					one_d_list[i + j - 2] = self.switch_number
 					bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
 					self.switch_number += 1
-					self.original_index = original_indices()
+					self.original_index = three_dimensions_to_one(0)[0]
+		one_d_list = three_dimensions_to_one(0)[1]
 		count = -1
-		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
-		newlist = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
-		two_d_list = []
-		for e1 in newlist:
-			for e2 in e1:
-				two_d_list.append(e2)
-		one_d_list = []
-		for e1 in two_d_list:
-			for e2 in e1:
-				one_d_list.append(e2)
-
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
 				count +=1		
