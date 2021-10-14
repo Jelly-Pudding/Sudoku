@@ -45,8 +45,16 @@ class Pane(object):
 				if mouse_x > i * 25 - 25 and mouse_x < i * 25 and mouse_y > j * 25 - 25 and mouse_y < j * 25:
 					one_d_list = three_dimensions_to_one(1)[1]
 					if j != 1:
-						j = (j -1) * 9 + 1
-					one_d_list[i + j - 2] = num_input
+						j = (j - 1) * 9 + 1
+					#the delete key is pressed
+					if num_input == 11:
+						one_d_list[i + j - 2] = 0
+					#the mouse is clicked
+					elif num_input == 10:
+						one_d_list[i + j - 2] = self.switch_number
+					#a number is inputted
+					else:
+						one_d_list[i + j - 2] = num_input
 					bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
 					self.switch_number += 1
 					self.original_index = three_dimensions_to_one(0)[0]
@@ -102,6 +110,11 @@ def main():
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT:
 				pygame.quit(); sys.exit();
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				num_input=10
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
 			elif event.type == pygame.KEYDOWN and event.key == pygame.K_1:
 				num_input=1
 				mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -144,6 +157,11 @@ def main():
 				pan.add_rectangle(mouse_x, mouse_y, num_input)
 			elif event.type == pygame.KEYDOWN and event.key == pygame.K_9:
 				num_input=9
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_DELETE:
+				num_input=11
 				mouse_x, mouse_y = pygame.mouse.get_pos()
 				pan.screen.fill((255, 255, 255))
 				pan.add_rectangle(mouse_x, mouse_y, num_input)			
