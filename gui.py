@@ -48,23 +48,8 @@ class Pane(object):
 					for e1 in two_d_list:
 						for e2 in e1:
 							one_d_list.append(e2)
-					if j == 2:
-						j = 10
-					if j == 3:
-						j = 19
-					if j == 4:
-						j = 28
-					if j == 5:
-						j = 37
-					if j == 6:
-						j = 46
-					if j == 7:
-						j = 55
-					if j == 8:
-						j = 64
-					if j == 9:
-						j = 73
-					
+					if j != 1:
+						j = (j -1) * 9 + 1
 					one_d_list[i + j - 2] = self.switch_number
 					bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
 					self.switch_number += 1
