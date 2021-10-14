@@ -92,32 +92,10 @@ class Pane(object):
 			#returns False as the solution won't have been found if the script gets to this line
 			return False	
 
-
-
-
-
-
-
-
-
-
-
-	def add_text(self):
-		#for i in range(0, 9, 1):
-			#for j in range(0, 9, 1):
-				#if i < 3:
-					#self.screen.blit(self.font.render("3", True, (255, 0, 0)), (27*i +5 , j*25.7))
-				#elif i < 6:
-					#self.screen.blit(self.font.render("4", True, (255, 0, 0)), (27*i, j*25.6))
-				#else:
-					#self.screen.blit(self.font.render("5", True, (255, 0, 0)), (26*i, j*25.3))
-		pygame.display.update()
-
 def main():
 	pan = Pane()
 	pan.add_rectangle()
 	pan.backtracking(bot)
-	pan.add_text()
 	clock = pygame.time.Clock()
 	while True:
 		clock.tick(pan.FPS)
