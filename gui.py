@@ -53,6 +53,11 @@ class Pane(object):
 		self.screen.fill((255, 255, 255))
 		pygame.display.update()
 		self.FPS = 60
+		self.over = False
+		self.linger_red = 0
+		self.linger_i = 0
+		self.linger_j = 0
+		self.previous_1d_list = []
 	def add_rectangle(self):
 		count = -1
 		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
@@ -68,14 +73,32 @@ class Pane(object):
 
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
-				count +=1		
-				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
-				if count in original_index:
-					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
-				elif one_d_list[count] == 0:				
-					self.screen.blit(self.font.render(" ", True, (255, 0, 0)), (i*25+7, j*25+2))
-				elif one_d_list[count] != 0:
-					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2)) 				
+				count +=1
+				if self.over == True:
+					self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+					if count in original_index:
+						self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
+					else:
+						self.screen.blit(self.font.render(str(one_d_list[count]), True, (90, 90, 240)), (i*25+7, j*25+2))
+				else:
+					if self.previous_1d_list != []:
+						if one_d_list[count] == self.previous_1d_list[count]:	
+							self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 2)
+						elif one_d_list[count] != self.previous_1d_list[count]:
+							self.linger_red += 1
+							self.linger_i = i
+							self.linger_j = j
+							self.rect = pygame.draw.rect(self.screen, ((255, 0, 0)), (1*25, j*25, 25, 25), 3)
+						if self.linger_red >= 1:
+								self.rect = pygame.draw.rect(self.screen, ((255, 100, 0)), (self.linger_i*25, self.linger_j*25, 25, 25), 3)
+								self.linger_Red = 0 
+
+					if count in original_index:
+						self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
+					elif one_d_list[count] != 0:
+						self.screen.blit(self.font.render(str(one_d_list[count]), True, (90, 90, 240)), (i*25+7, j*25+2)) 				
+
+		self.previous_1d_list = one_d_list
 				
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
@@ -99,16 +122,16 @@ class Pane(object):
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
 					#blanks the screen so numbers don't overlap one another
 					self.screen.fill((255, 255, 255))
-					#updates the screen with the new numbers
 					self.add_rectangle()
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
+						self.over = True
+						self.screen.fill((255, 255, 255))
+						self.add_rectangle()	
+
 						return True
 					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid (the move does not result in the puzzle being solved)
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
-					#blanks the screen & updates numbers
-					self.screen.fill((255, 255, 255))
-					self.add_rectangle()
 			#returns False as there can't be a solution if the function arrives at this line
 			return False	
 
