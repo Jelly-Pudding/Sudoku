@@ -53,12 +53,11 @@ class Pane(object):
 		self.screen.fill((255, 255, 255))
 		pygame.display.update()
 		self.FPS = 60
-		self.over = False
-		self.linger_red = 0
-		self.linger_i = 0
-		self.linger_j = 0
-		self.previous_1d_list = []
-	def add_rectangle(self):
+	def add_rectangle(self, mouse_x, mouse_y):
+
+		if mouse_x > 0 and mouse_x < 25 and mouse_y > 0 and mouse_y < 25:
+			bot.sudoku_board[0][0][0] = 5
+
 		count = -1
 		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
 		newlist = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
@@ -73,32 +72,14 @@ class Pane(object):
 
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
-				count +=1
-				if self.over == True:
-					self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
-					if count in original_index:
-						self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
-					else:
-						self.screen.blit(self.font.render(str(one_d_list[count]), True, (90, 90, 240)), (i*25+7, j*25+2))
-				else:
-					if self.previous_1d_list != []:
-						if one_d_list[count] == self.previous_1d_list[count]:	
-							self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 2)
-						elif one_d_list[count] != self.previous_1d_list[count]:
-							self.linger_red += 1
-							self.linger_i = i
-							self.linger_j = j
-							self.rect = pygame.draw.rect(self.screen, ((255, 0, 0)), (1*25, j*25, 25, 25), 3)
-						if self.linger_red >= 1:
-								self.rect = pygame.draw.rect(self.screen, ((255, 100, 0)), (self.linger_i*25, self.linger_j*25, 25, 25), 3)
-								self.linger_Red = 0 
-
-					if count in original_index:
-						self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
-					elif one_d_list[count] != 0:
-						self.screen.blit(self.font.render(str(one_d_list[count]), True, (90, 90, 240)), (i*25+7, j*25+2)) 				
-
-		self.previous_1d_list = one_d_list
+				count +=1		
+				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+				if count in original_index:
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
+				if one_d_list[count] == 0:				
+					self.screen.blit(self.font.render(" ", True, (255, 0, 0)), (i*25+7, j*25+2))
+				elif one_d_list[count] != 0:
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2)) 				
 				
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
@@ -106,7 +87,6 @@ class Pane(object):
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 4)
 		
 		pygame.display.update()
-
 	def backtracking(self, classer):
 		if classer.next_available_move() == False:
 			#means there are no moves left - i.e. the solution has been found
@@ -122,30 +102,34 @@ class Pane(object):
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = i
 					#blanks the screen so numbers don't overlap one another
 					self.screen.fill((255, 255, 255))
+					#updates the screen with the new numbers
 					self.add_rectangle()
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
-						self.over = True
-						self.screen.fill((255, 255, 255))
-						self.add_rectangle()	
-
 						return True
 					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid (the move does not result in the puzzle being solved)
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
+					#blanks the screen & updates numbers
 			#returns False as there can't be a solution if the function arrives at this line
 			return False	
 
 def main():
 	pan = Pane()
-	pan.add_rectangle()
-	pan.backtracking(bot)
+	pan.add_rectangle(0, 0)
+	#pan.backtracking(bot)
 	clock = pygame.time.Clock()
 	while True:
 		clock.tick(pan.FPS)
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT:
 				pygame.quit(); sys.exit();
+			elif event.type == pygame.MOUSEMOTION:
+				print("mouse at (%d, %d" % event.pos)
+		key = pygame.key.get_pressed()
+		if key[pygame.K_SPACE]:
+			mouse_x, mouse_y = pygame.mouse.get_pos()
+			pan.screen.fill((255, 255, 255))
+			pan.add_rectangle(mouse_x, mouse_y)
 
 if __name__ == "__main__":
 	main()
-
