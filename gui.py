@@ -53,8 +53,11 @@ class Pane(object):
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
 				count +=1		
-				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)				
-				self.screen.blit(self.font.render(str(one_d_list[count]), True, (255, 0, 0)), (i*25+7, j*25+2)) 				
+				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+				if one_d_list[count] == 0:				
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (255, 0, 0)), (i*25+7, j*25+2))
+				elif one_d_list[count] != 0:
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 140, 140)), (i*25+7, j*25+2)) 				
 				
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
 		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
