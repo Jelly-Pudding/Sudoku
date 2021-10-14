@@ -132,12 +132,5 @@ def backtracking(classer):
 		#returns False as there's no solution if the function gets to this line without returning yet
 		return False
 					
-#backtracking(suk)
 #suk.printer()
-
-
-
-
-
-
-
+#backtracking(suk)

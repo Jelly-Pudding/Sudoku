@@ -37,27 +37,30 @@ class Pane(object):
 		self.FPS = 60
 		self.original_index = []
 		self.switch_number = 1
+		#allows to skip initial for loops when backtracking to improve performance
+		self.skip_for_loops = False
 	def add_rectangle(self, mouse_x, mouse_y, num_input):
-		if self.switch_number == 10:
-			self.switch_number = 1
-		for i in range(1, 10, 1):
-			for j in range(1, 10, 1):
-				if mouse_x > i * 25 - 25 and mouse_x < i * 25 and mouse_y > j * 25 - 25 and mouse_y < j * 25:
-					one_d_list = three_dimensions_to_one(1)[1]
-					if j != 1:
-						j = (j - 1) * 9 + 1
-					#the delete key is pressed
-					if num_input == 11:
-						one_d_list[i + j - 2] = 0
-					#the mouse is clicked
-					elif num_input == 10:
-						one_d_list[i + j - 2] = self.switch_number
-					#a number is inputted
-					else:
-						one_d_list[i + j - 2] = num_input
-					bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
-					self.switch_number += 1
-					self.original_index = three_dimensions_to_one(0)[0]
+		if self.skip_for_loops == False:
+			if self.switch_number == 10:
+				self.switch_number = 1
+			for i in range(1, 10, 1):
+				for j in range(1, 10, 1):
+					if mouse_x > i * 25 - 25 and mouse_x < i * 25 and mouse_y > j * 25 - 25 and mouse_y < j * 25:
+						one_d_list = three_dimensions_to_one(1)[1]
+						if j != 1:
+							j = (j - 1) * 9 + 1
+						#the delete key is pressed
+						if num_input == 11:
+							one_d_list[i + j - 2] = 0
+						#the mouse is clicked
+						elif num_input == 10:
+							one_d_list[i + j - 2] = self.switch_number
+						#a number is inputted
+						else:
+							one_d_list[i + j - 2] = num_input
+						bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
+						self.switch_number += 1
+						self.original_index = three_dimensions_to_one(0)[0]
 		one_d_list = three_dimensions_to_one(0)[1]
 		count = -1
 		for i in range(0, 9, 1):
@@ -166,6 +169,7 @@ def main():
 				pan.screen.fill((255, 255, 255))
 				pan.add_rectangle(mouse_x, mouse_y, num_input)			
 			elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+				bot.skip_for_loops = True
 				pan.backtracking(bot)
 
 if __name__ == "__main__":
