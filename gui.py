@@ -5,44 +5,23 @@ from sudoku import Sudoku
 
 bot = Sudoku()
 
-bot.sudoku_board[1][0][0] = 5
-bot.sudoku_board[2][0][0] = 3
-bot.sudoku_board[4][0][0] = 8
-bot.sudoku_board[7][0][0] = 2
-bot.sudoku_board[2][0][1] = 8
-bot.sudoku_board[4][0][1] = 4
-bot.sudoku_board[7][0][1] = 7
-bot.sudoku_board[3][0][2] = 6
-bot.sudoku_board[5][0][2] = 5
-bot.sudoku_board[6][0][2] = 4
-bot.sudoku_board[2][1][0] = 7
-bot.sudoku_board[3][1][0] = 4
-bot.sudoku_board[7][1][0] = 3
-bot.sudoku_board[0][1][1] = 2
-bot.sudoku_board[4][1][2] = 3
-bot.sudoku_board[8][1][2] = 9
-bot.sudoku_board[0][2][0] = 6
-bot.sudoku_board[4][2][0] = 9
-bot.sudoku_board[8][2][1] = 1
-bot.sudoku_board[2][2][2] = 2
-bot.sudoku_board[5][2][2] = 8
-bot.sudoku_board[7][2][2] = 6
-
-#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
-original_numbers = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
-two_d_list = []
-for e1 in original_numbers:
-	for e2 in e1:
-		two_d_list.append(e2)
-one_d_list = []
-for e1 in two_d_list:
-	for e2 in e1:
-		one_d_list.append(e2)
-#Will store the indices of the original numbers in the puzzle (so as to differentiate them from the changing numbers in the backtracking function)
-original_index = []
-for index in range(len(one_d_list)):
-	if one_d_list[index] != 0:
-		original_index.append(index)
+def original_indices():
+	#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly
+	original_numbers = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
+	two_d_list = []
+	for e1 in original_numbers:
+		for e2 in e1:
+			two_d_list.append(e2)
+	one_d_list = []
+	for e1 in two_d_list:
+		for e2 in e1:
+			one_d_list.append(e2)
+	#Will store the indices of the original numbers in the puzzle (so as to differentiate them from the changing numbers in the backtracking function)
+	original_index = []
+	for index in range(len(one_d_list)):
+		if one_d_list[index] != 0:
+			original_index.append(index)
+	return original_index
 
 class Pane(object):
 	def __init__(self):
@@ -53,6 +32,7 @@ class Pane(object):
 		self.screen.fill((255, 255, 255))
 		pygame.display.update()
 		self.FPS = 60
+		self.original_index = []
 		self.switch_number = 1
 	def add_rectangle(self, mouse_x, mouse_y):
 		if self.switch_number == 10:
@@ -88,6 +68,7 @@ class Pane(object):
 					one_d_list[i + j - 2] = self.switch_number
 					bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
 					self.switch_number += 1
+					self.original_index = original_indices()
 		count = -1
 		#tranposes the 3d list so when it is converted to 1d, it fills in the board correctly as this function fills in numbers in a different order
 		newlist = np.transpose(bot.sudoku_board, axes=(1, 2, 0)).tolist()
@@ -104,9 +85,9 @@ class Pane(object):
 			for j in range(0, 9, 1):
 				count +=1		
 				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
-				if count in original_index:
+				if count in self.original_index:
 					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
-				if one_d_list[count] == 0:				
+				elif one_d_list[count] == 0:				
 					self.screen.blit(self.font.render(" ", True, (255, 0, 0)), (i*25+7, j*25+2))
 				elif one_d_list[count] != 0:
 					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2)) 				
@@ -133,7 +114,7 @@ class Pane(object):
 					#blanks the screen so numbers don't overlap one another
 					self.screen.fill((255, 255, 255))
 					#updates the screen with the new numbers
-					self.add_rectangle()
+					self.add_rectangle(mouse_x=1000, mouse_y=1000)
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
 						return True
@@ -161,6 +142,8 @@ def main():
 				pan.screen.fill((255, 255, 255))
 				pan.add_rectangle(mouse_x, mouse_y)
 				bot.printer()
+			elif event.type == pygame.KEYDOWN:
+				pan.backtracking(bot)
 
 if __name__ == "__main__":
 	main()
