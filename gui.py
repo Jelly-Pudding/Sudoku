@@ -37,7 +37,7 @@ class Pane(object):
 		self.FPS = 60
 		self.original_index = []
 		self.switch_number = 1
-	def add_rectangle(self, mouse_x, mouse_y):
+	def add_rectangle(self, mouse_x, mouse_y, num_input):
 		if self.switch_number == 10:
 			self.switch_number = 1
 		for i in range(1, 10, 1):
@@ -46,7 +46,7 @@ class Pane(object):
 					one_d_list = three_dimensions_to_one(1)[1]
 					if j != 1:
 						j = (j -1) * 9 + 1
-					one_d_list[i + j - 2] = self.switch_number
+					one_d_list[i + j - 2] = num_input
 					bot.sudoku_board = np.rollaxis(np.asarray(one_d_list).reshape(9, 3, 3), 0)
 					self.switch_number += 1
 					self.original_index = three_dimensions_to_one(0)[0]
@@ -58,8 +58,6 @@ class Pane(object):
 				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
 				if count in self.original_index:
 					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
-				elif one_d_list[count] == 0:				
-					self.screen.blit(self.font.render(" ", True, (255, 0, 0)), (i*25+7, j*25+2))
 				elif one_d_list[count] != 0:
 					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2)) 				
 				
@@ -85,7 +83,7 @@ class Pane(object):
 					#blanks the screen so numbers don't overlap one another
 					self.screen.fill((255, 255, 255))
 					#updates the screen with the new numbers
-					self.add_rectangle(mouse_x=1000, mouse_y=1000)
+					self.add_rectangle(mouse_x=1000, mouse_y=1000, num_input=-1)
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
 						return True
@@ -96,7 +94,7 @@ class Pane(object):
 
 def main():
 	pan = Pane()
-	pan.add_rectangle(0, 0)
+	pan.add_rectangle(0, 0, 0)
 	#pan.backtracking(bot)
 	clock = pygame.time.Clock()
 	while True:
@@ -104,11 +102,52 @@ def main():
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT:
 				pygame.quit(); sys.exit();
-			elif event.type == pygame.MOUSEBUTTONDOWN:
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_1:
+				num_input=1
 				mouse_x, mouse_y = pygame.mouse.get_pos()
 				pan.screen.fill((255, 255, 255))
-				pan.add_rectangle(mouse_x, mouse_y)
-			elif event.type == pygame.KEYDOWN:
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_2:
+				num_input=2
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_3:
+				num_input=3
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_4:
+				num_input=4
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_5:
+				num_input=5
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_6:
+				num_input=6
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_7:
+				num_input=7
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_8:
+				num_input=8
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_9:
+				num_input=9
+				mouse_x, mouse_y = pygame.mouse.get_pos()
+				pan.screen.fill((255, 255, 255))
+				pan.add_rectangle(mouse_x, mouse_y, num_input)			
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
 				pan.backtracking(bot)
 
 if __name__ == "__main__":
