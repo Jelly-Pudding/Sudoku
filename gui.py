@@ -132,10 +132,14 @@ class Pane(object):
 					self.create_gui_board(mouse_x=1000, mouse_y=1000, num_input=-1)
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
-						#Ensures there are no coloured boxes once the solution has been found
+						#Draws the board without coloured boxes once the solution has been found
+						self.screen.fill((255, 255, 255))
+						self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 2)
+						self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 2)
+						self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 2)
+						self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 2)
 						one_d_list = three_dimensions_to_one(0)[1]
 						count = -1
-						self.screen.fill((255, 255, 255))
 						for i in range(0, 9, 1):
 							for j in range(0, 9, 1):
 								count +=1
