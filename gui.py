@@ -36,10 +36,18 @@ class Pane(object):
 		pygame.display.update()
 		self.FPS = 60
 		self.original_index = []
+		self.previous_1d_list = []
 		self.switch_number = 1
 		#allows to skip initial for loops when backtracking to improve performance
 		self.skip_for_loops = False
 	def add_rectangle(self, mouse_x, mouse_y, num_input):
+
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 2)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 2)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 2)
+		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 2)
+
+
 		if self.skip_for_loops == False:
 			if self.switch_number == 10:
 				self.switch_number = 1
@@ -65,19 +73,27 @@ class Pane(object):
 		count = -1
 		for i in range(0, 9, 1):
 			for j in range(0, 9, 1):
-				count +=1		
-				self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+				count +=1
+				if len(self.previous_1d_list) > 1:
+					if count in self.original_index:
+						self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+					elif one_d_list[count] == self.previous_1d_list[count] and one_d_list[count] != 0:
+						self.rect = pygame.draw.rect(self.screen, ((50, 220, 0)), (i*25, j*25, 25, 25), 1)
+					elif one_d_list[count] != self.previous_1d_list[count]:
+						self.rect = pygame.draw.rect(self.screen, ((255, 0, 0)), (i*25, j*25, 25, 25), 1)
+					elif one_d_list[count] == 0:
+						self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+				elif len(self.previous_1d_list) == 0:
+					self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
 				if count in self.original_index:
 					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
 				elif one_d_list[count] != 0:
-					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2)) 				
-				
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (75, 0), (75, 225), 4)
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (150, 0), (150, 225), 4)
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 75), (225, 75), 4)
-		self.line = pygame.draw.line(self.screen, ((0, 0, 0)), (0, 150), (225, 150), 4)
+					self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2))
+ 				
+		self.previous_1d_list = copy.deepcopy(one_d_list)
 		
 		pygame.display.update()
+
 	def backtracking(self, classer):
 		if classer.next_available_move() == False:
 			#means there are no moves left - i.e. the solution has been found
@@ -97,6 +113,18 @@ class Pane(object):
 					self.add_rectangle(mouse_x=1000, mouse_y=1000, num_input=-1)
 					#The recursive part of the function (function called inside itself) 
 					if self.backtracking(classer) == True:
+						one_d_list = three_dimensions_to_one(0)[1]
+						count = -1
+						self.screen.fill((255, 255, 255))
+						for i in range(0, 9, 1):
+							for j in range(0, 9, 1):
+								count +=1
+								self.rect = pygame.draw.rect(self.screen, ((0, 0, 0)), (i*25, j*25, 25, 25), 1)
+								if count in self.original_index:
+									self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 0, 0)), (i*25+7, j*25+2))
+								else:
+									self.screen.blit(self.font.render(str(one_d_list[count]), True, (0, 160, 160)), (i*25+7, j*25+2))
+						pygame.display.update()
 						return True
 					#Goes back a step (backtracks) and blanks the tile as the current board configuration must be invalid (the move does not result in the puzzle being solved)
 					classer.sudoku_board[move_index[0]][move_index[1]][move_index[2]] = 0
