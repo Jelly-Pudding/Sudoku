@@ -1,4 +1,5 @@
 import copy
+
 class Sudoku:
 	def __init__(self):
 		self.sudoku_board = [[[0 for item_in_box_rows in range(3)] for box_per_row_of_boxes in range(3)] for horizontal_line in range(9)]
@@ -86,6 +87,8 @@ class Sudoku:
 		
 suk = Sudoku()
 
+# A difficult Sudoku puzzle found online
+
 suk.sudoku_board[1][0][0] = 5
 suk.sudoku_board[2][0][0] = 3
 suk.sudoku_board[4][0][0] = 8
@@ -132,5 +135,9 @@ def backtracking(classer):
 		#returns False as there's no solution if the function gets to this line without returning yet
 		return False
 					
-#suk.printer()
-#backtracking(suk)
+#only runs if this file gets explicitly called
+
+if __name__ == "__main__":
+	suk.printer()
+	backtracking(suk)
+
