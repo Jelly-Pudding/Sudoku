@@ -223,3 +223,5 @@ def main():
 			elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
 				bot.skip_for_loops = True
 				pan.backtracking(bot)
+
+main()
